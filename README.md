@@ -1,3 +1,1 @@
-# axurePermission
-springBoot+Thymeleaf Demo
-just a easy permission manager system
+init a springBoot project with mybatisPlus hutool
