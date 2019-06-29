@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gq360.axurepermission.module.mapper.UserMapper">
+
+    <update id="update">
+        update user set permission=#{permission} where account=#{account}
+    </update>
+
+    <select id="selectByAccount" resultType="com.gq360.axurepermission.module.entity.UserEntity">
+        select account,password,permission from user where account=#{account}
+    </select>
+
+    <select id="selectAllUser" resultType="com.gq360.axurepermission.module.entity.UserEntity">
+        select account,password,permission from user where account != #{admin}
+    </select>
+
+    <insert id="insert">
+        insert into user (account,password) values (#{account},#{password})
+    </insert>
+
+
+</mapper>

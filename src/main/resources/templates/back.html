@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台</title>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
+    <script th:src="@{/layui/layui.js}"></script>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script>
+        layui.use(['form'], function () {
+            var form = layui.form;
+        });
+    </script>
+    <script  th:inline="javascript">
+        var userList = [[${allUser}]]
+        var map = new Map()
+        for (var k = 0; k < userList.length; k++) {
+            map.set(userList[k].account,userList[k].permissionList)
+        }
+        function change(account,fileName) {
+            var i
+            for(i = 0;i<userList.length;i++){
+                if (userList[i].account === account){
+                    break
+                }
+            }
+            var value = document.getElementById(fileName).value
+            for(var j = 0;j<userList[i].permissionList.length;j++){
+                if (userList[i].permissionList[j]===value) {
+                    userList[i].permissionList.splice(j, 1)
+                    map.set(account,userList[i].permissionList)
+                    return
+                }
+            }
+            userList[i].permissionList.push(value)
+            map.set(account,userList[i].permissionList)
+            console.log(map)
+        }
+
+        function commit(account) {
+            var commitInfo = {account:'',permissionList:[]}
+            commitInfo.account = account
+            commitInfo.permissionList = map.get(account)
+            $.ajax({
+                url: "/update",
+                data: JSON.stringify(commitInfo),
+                contentType: "application/json",
+                type: "POST",
+                dataType: "text",
+                success: function(data) {
+                    alert(data)
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div style="float: right;font-size: 20px;"><a href="/">退出登录</a></div>
+<table class="layui-table">
+    <thead>
+    <tr>
+        <th>用户名</th>
+        <th>全部文件</th>
+        <th>提交</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user:${allUser}">
+        <td th:text="${user.account}"></td>
+        <td>
+            <div class="layui-form">
+                <span th:each="file:${user.allFile}">
+                    <span th:onclick="change([[${user.account}]],[[${file.key}]]);">
+                        <input type="checkbox"  th:title="${file.key}" lay-skin="primary" th:checked="${file.value} ? 'checked'" th:id="${file.key}" th:value="${file.key}">
+                    </span>
+                </span>
+            </div>
+        </td>
+        <td>
+            <button type="button" class="layui-btn" th:onclick="commit([[${user.account}]])">提交</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
