@@ -3,11 +3,16 @@ package com.init.project.swallow.service;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.db.Db;
 import cn.hutool.db.Entity;
-import org.springframework.stereotype.Service;
+import com.alibaba.fastjson.JSONObject;
 import com.init.project.swallow.dto.UserDTO;
+import com.init.project.util.HttpUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: helloworld
@@ -17,6 +22,15 @@ import java.util.List;
  **/
 @Service
 public class UserService {
+
+//    @Value("${getOpenid.url}")
+//    private String getOpenidUrl;
+//    @Value("${loginRequestGrantType}")
+//    private String grantType;
+//    @Value("${appId}")
+//    private String appId;
+//    @Value("${appSecret}")
+//    private String appSecret;
 
     public Boolean insert(String openid,Integer score){
         try {
@@ -40,8 +54,30 @@ public class UserService {
         return list;
     }
 
-    public static void main(String[] args) throws SQLException {
-        new UserService().findAll("123");
-    }
+//    /**
+//     * 根据code获取openid
+//     * @param code
+//     * @return
+//     * @throws Exception
+//     */
+//    public String getOpenid(String code){
+//        Map<String, Object> getParams = new LinkedHashMap<>();
+//        getParams.put("appid", appId);
+//        getParams.put("secret", appSecret);
+//        getParams.put("js_code", code);
+//        getParams.put("grant_type", grantType);
+//        String result = null;
+//        try {
+//            result = HttpUtil.get(getOpenidUrl, getParams, 0, 0);
+//        } catch (Exception e) {
+//        }
+//        JSONObject resultJson = JSONObject.parseObject(result);
+//        Integer errCode = resultJson.getInteger("errcode");
+//        String errMsg = resultJson.getString("errmsg");
+//        String openid = resultJson.getString("openid");
+//        String sessionKey = resultJson.getString("session_key");
+//        return openid;
+//    }
+
 
 }
